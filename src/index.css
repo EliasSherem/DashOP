@@ -8,35 +8,52 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* CSC Dashboard - dark navy Power BI theme */
+    --background: 215 45% 18%;
+    --foreground: 0 0% 100%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 215 50% 22%;
+    --card-foreground: 0 0% 100%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 215 50% 22%;
+    --popover-foreground: 0 0% 100%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 210 100% 60%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 215 40% 28%;
+    --secondary-foreground: 0 0% 100%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 215 35% 30%;
+    --muted-foreground: 210 20% 75%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 200 90% 55%;
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 75% 55%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 215 40% 32%;
+    --input: 215 40% 32%;
+    --ring: 200 90% 55%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
+
+    /* Chart palette matching screenshots */
+    --chart-green: 145 70% 45%;
+    --chart-cyan: 195 85% 55%;
+    --chart-purple: 290 60% 50%;
+    --chart-magenta: 320 75% 55%;
+    --chart-yellow: 45 95% 55%;
+    --chart-orange: 22 90% 55%;
+    --chart-red: 0 78% 58%;
+    --chart-blue: 215 80% 55%;
+    --chart-pink: 340 75% 70%;
+    --chart-brown: 22 45% 45%;
+
+    --kpi-bg: 215 55% 24%;
+    --panel-bg: 215 55% 22%;
+    --sidebar-rail: 215 45% 16%;
 
     --sidebar-background: 0 0% 98%;
 
