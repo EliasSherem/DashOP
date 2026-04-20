@@ -1,16 +1,44 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState } from "react";
+import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
+import { PageFooter } from "@/components/dashboard/PageFooter";
+import { SectionLabel } from "@/components/dashboard/SectionLabel";
+import { CapacitacionPage } from "./sections/CapacitacionPage";
+import { AccesosPage } from "./sections/AccesosPage";
+import { CoberturasPage } from "./sections/CoberturasPage";
+import { EventosPage } from "./sections/EventosPage";
+import { SituacionesPage } from "./sections/SituacionesPage";
+import { EficienciaPage } from "./sections/EficienciaPage";
 
-// IMPORTANT: Fully REPLACE this with your own code
-const PlaceholderIndex = () => {
-  // PLACEHOLDER: Replace this entire return statement with the user's app.
-  // The inline background color is intentionally not part of the design system.
+const SECTIONS = [
+  { key: "capacitacion", label: "Capacitación", filters: undefined, Component: CapacitacionPage },
+  { key: "accesos", label: "Accesos", filters: [{ label: "Fecha" }], Component: AccesosPage },
+  { key: "coberturas", label: "Coberturas", filters: undefined, Component: CoberturasPage },
+  { key: "eventos", label: "Análisis de Eventos", filters: undefined, Component: EventosPage },
+  { key: "situaciones", label: "Gestión de situaciones", filters: undefined, Component: SituacionesPage },
+  { key: "eficiencia", label: "Eficiencia Tecnológica", filters: [{ label: "Fecha", value: "2026 (Año) + enero (Mes)" }, { label: "Zona" }, { label: "Comunidad" }, { label: "Tipo" }, { label: "Institución" }], Component: EficienciaPage },
+] as const;
+
+const Index = () => {
+  const [idx, setIdx] = useState(0);
+  const current = SECTIONS[idx];
+  const Page = current.Component;
+
   return (
-    <div className="flex min-h-screen items-center justify-center" style={{ backgroundColor: '#fcfbf8' }}>
-      <img data-lovable-blank-page-placeholder="REMOVE_THIS" src="/placeholder.svg" alt="Your app will live here!" />
+    <div className="min-h-screen bg-background flex flex-col relative">
+      <DashboardHeader
+        filters={current.filters as any}
+        onPrev={() => setIdx((i) => Math.max(0, i - 1))}
+        onNext={() => setIdx((i) => Math.min(SECTIONS.length - 1, i + 1))}
+        showPrev={idx > 0}
+        showNext={idx < SECTIONS.length - 1}
+      />
+      <div className="relative flex-1 flex flex-col">
+        <SectionLabel label={current.label} />
+        <Page />
+      </div>
+      <PageFooter />
     </div>
   );
 };
-
-const Index = PlaceholderIndex;
 
 export default Index;
