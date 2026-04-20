@@ -118,5 +118,21 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+}
+
+@layer components {
+  .panel {
+    @apply rounded-xl bg-[hsl(var(--panel-bg))] border border-[hsl(215_40%_30%)] shadow-[0_4px_14px_rgba(0,0,0,0.25)];
+  }
+  .kpi {
+    @apply rounded-xl bg-[hsl(var(--kpi-bg))] border border-[hsl(215_40%_30%)] shadow-[0_4px_14px_rgba(0,0,0,0.25)];
+  }
+  .panel-title {
+    @apply text-base font-semibold text-foreground/95 tracking-wide;
+  }
+  .vertical-tab {
+    @apply [writing-mode:vertical-rl] rotate-180 text-xl font-semibold tracking-wider text-foreground/85;
   }
 }
