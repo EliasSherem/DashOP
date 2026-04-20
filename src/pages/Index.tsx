@@ -2,6 +2,7 @@ import { useState } from "react";
 import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
 import { PageFooter } from "@/components/dashboard/PageFooter";
 import { SectionLabel } from "@/components/dashboard/SectionLabel";
+import { TopNav } from "@/components/dashboard/TopNav";
 import { CapacitacionPage } from "./sections/CapacitacionPage";
 import { AccesosPage } from "./sections/AccesosPage";
 import { CoberturasPage } from "./sections/CoberturasPage";
@@ -25,13 +26,12 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background flex flex-col relative">
-      <DashboardHeader
-        filters={current.filters as any}
-        onPrev={() => setIdx((i) => Math.max(0, i - 1))}
-        onNext={() => setIdx((i) => Math.min(SECTIONS.length - 1, i + 1))}
-        showPrev={idx > 0}
-        showNext={idx < SECTIONS.length - 1}
+      <TopNav
+        items={SECTIONS.map((s) => s.label)}
+        activeIndex={idx}
+        onSelect={setIdx}
       />
+      <DashboardHeader filters={current.filters as any} />
       <div className="relative flex-1 flex flex-col">
         <SectionLabel label={current.label} />
         <Page />
