@@ -1,5 +1,5 @@
 import logo from "@/assets/csc-logo.png";
-import { ArrowLeft, ArrowRight, Filter, ChevronDown } from "lucide-react";
+import { Filter, ChevronDown } from "lucide-react";
 
 interface FilterDef {
   label: string;
@@ -8,10 +8,6 @@ interface FilterDef {
 
 interface Props {
   filters?: FilterDef[];
-  onPrev?: () => void;
-  onNext?: () => void;
-  showPrev?: boolean;
-  showNext?: boolean;
 }
 
 const DEFAULT_FILTERS: FilterDef[] = [
@@ -24,24 +20,10 @@ const DEFAULT_FILTERS: FilterDef[] = [
 
 export const DashboardHeader = ({
   filters = DEFAULT_FILTERS,
-  onPrev,
-  onNext,
-  showPrev = true,
-  showNext = true,
 }: Props) => {
   return (
     <header className="px-6 pt-4 pb-3">
       <div className="flex items-start gap-4">
-        <button
-          onClick={onPrev}
-          className={`mt-3 h-9 w-9 grid place-items-center rounded-full bg-[hsl(215_50%_24%)] text-foreground/80 hover:text-foreground transition ${
-            !showPrev ? "invisible" : ""
-          }`}
-          aria-label="Anterior"
-        >
-          <ArrowLeft size={18} />
-        </button>
-
         <img
           src={logo}
           alt="CSC logo"
@@ -82,16 +64,6 @@ export const DashboardHeader = ({
             ))}
           </div>
         </div>
-
-        <button
-          onClick={onNext}
-          className={`mt-3 h-9 w-9 grid place-items-center rounded-full text-foreground/70 hover:text-foreground transition ${
-            !showNext ? "invisible" : ""
-          }`}
-          aria-label="Siguiente"
-        >
-          <ArrowRight size={18} />
-        </button>
       </div>
     </header>
   );
