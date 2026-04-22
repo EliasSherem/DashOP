@@ -1,152 +1,144 @@
-import { Panel } from "@/components/dashboard/Panel";
+import { Award, BarChart3, Clock, DatabaseZap, GraduationCap, Network } from "lucide-react";
 import { KpiCard } from "@/components/dashboard/KpiCard";
-import { Clock, GraduationCap, Network, Award, BarChart3 } from "lucide-react";
-import {
-  ResponsiveContainer,
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  AreaChart,
-  Area,
-  Tooltip,
-  LabelList,
-} from "recharts";
+import { DashboardPageMessage, DashboardPageSkeleton } from "@/components/dashboard/PageState";
+import { Panel } from "@/components/dashboard/Panel";
+import { formatInteger } from "@/features/dashboard/format";
+import { useCapacitacionAvailability } from "@/features/dashboard/hooks";
 
-const monthly = [
-  { m: "enero", v: 31 },
-  { m: "febrero", v: 62 },
-  { m: "marzo", v: 53 },
-  { m: "abril", v: 49 },
-  { m: "mayo", v: 26 },
-  { m: "junio", v: 12 },
-  { m: "julio", v: 23 },
-  { m: "octubre", v: 25 },
-  { m: "noviembre", v: 30 },
-];
+export const CapacitacionPage = () => {
+  const {
+    model,
+    exposedSourceTables,
+    hasTrainingSources,
+    isLoading,
+    error,
+  } = useCapacitacionAvailability();
 
-const ranking = [
-  { name: "Moshe S...", v: 0.91 },
-  { name: "Ari Achar", v: 0.86 },
-  { name: "Jessica F...", v: 0.86 },
-  { name: "Mauricio ...", v: 0.86 },
-  { name: "Rafael N...", v: 0.86 },
-  { name: "Uri Littman", v: 0.82 },
-  { name: "Alberto S...", v: 0.77 },
-  { name: "Jonathan...", v: 0.77 },
-  { name: "Miriam H...", v: 0.77 },
-  { name: "Bernardo...", v: 0.73 },
-  { name: "Aaron W...", v: 0.68 },
-  { name: "Dylan Levy", v: 0.68 },
-  { name: "Eyal Reznik", v: 0.68 },
-  { name: "Isaac Yan...", v: 0.68 },
-  { name: "Mordejai ...", v: 0.64 },
-  { name: "Nathan B...", v: 0.64 },
-  { name: "Amos Gur", v: 0.55 },
-  { name: "Eliezer G...", v: 0.55 },
-  { name: "Nessim K...", v: 0.5 },
-  { name: "Michal Pi...", v: 0.18 },
-  { name: "Mario Po...", v: 0.14 },
-];
+  if (isLoading && !model) {
+    return <DashboardPageSkeleton />;
+  }
 
-export const CapacitacionPage = () => (
-  <div className="grid grid-cols-12 gap-4 px-12 pb-2 flex-1 min-h-0">
-    {/* Left column */}
-    <div className="col-span-3 flex flex-col gap-4">
-      <div className="grid grid-cols-2 gap-4">
-        <KpiCard value="5,10" label={<>Horas-Hombre Capacitación</>} icon={<Clock />} />
-        <KpiCard value="35" label={<>Total de personas capacitadas</>} icon={<GraduationCap />} />
-      </div>
-      <Panel title="Ranking de capacitación de instructores">
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="text-foreground/85 border-b border-[hsl(215_40%_35%)]">
-              <th className="text-left py-2 font-medium">Instructor</th>
-              <th className="text-right py-2 font-medium">Alcance Capacitación ▾</th>
-            </tr>
-          </thead>
-          <tbody className="text-foreground/90">
-            <tr className="border-b border-[hsl(215_40%_35%)]"><td className="py-2">Michal pinski</td><td className="text-right">25</td></tr>
-            <tr className="border-b border-[hsl(215_40%_35%)]"><td className="py-2">URI y Gabriel</td><td className="text-right">10</td></tr>
-            <tr><td className="py-2 font-semibold">Total</td><td className="text-right font-semibold">35</td></tr>
-          </tbody>
-        </table>
-        <div className="mt-6 flex items-center gap-3">
-          <span className="text-sm text-foreground/85">Instructores certificados</span>
-          <span className="px-3 py-1 rounded bg-background/40 border border-[hsl(215_40%_32%)] text-sm">--</span>
+  if (error) {
+    return (
+      <DashboardPageMessage
+        variant="error"
+        title="No fue posible cargar Capacitación"
+        description="La capa de filtros no respondió correctamente. Reintenta la consulta o revisa la conexión con Supabase."
+      />
+    );
+  }
+
+  const dateBounds = model?.dateBounds;
+
+  return (
+    <div className="grid grid-cols-12 gap-4 px-12 pb-2 flex-1 min-h-0">
+      <div className="col-span-3 flex flex-col gap-4">
+        <div className="grid grid-cols-2 gap-4">
+          <KpiCard
+            value={hasTrainingSources ? "1" : "0"}
+            label="Vistas públicas de capacitación expuestas"
+            icon={<Clock />}
+          />
+          <KpiCard
+            value={formatInteger(exposedSourceTables.length)}
+            label="Fuentes operativas visibles hoy"
+            icon={<GraduationCap />}
+          />
         </div>
-      </Panel>
-      <Panel title="Cobertura de competencias impactadas" iconRight={<Award size={18} />}>
-        <div className="grid grid-cols-2 gap-1 h-32">
-          <div className="bg-[hsl(var(--chart-blue))] rounded-l p-3 flex flex-col justify-between text-white">
-            <span className="text-sm font-medium">Interrogatorio</span>
-            <span>1</span>
+
+        <Panel title="Estado de integración">
+          <div className="space-y-3 text-sm text-foreground/85">
+            <p>
+              Esta sección ya usa la misma infraestructura real de filtros y backend que el resto del dashboard.
+            </p>
+            <p>
+              Aun así, el frontend público todavía no tiene una vista expuesta para `training_session` ni `kabat_meeting_attendance`.
+            </p>
           </div>
-          <div className="bg-[hsl(var(--chart-orange))] rounded-r p-3 flex flex-col justify-between text-white">
-            <span className="text-sm font-medium">Transporte</span>
-            <span>1</span>
-          </div>
-        </div>
-      </Panel>
-    </div>
+        </Panel>
 
-    {/* Center column */}
-    <div className="col-span-6 flex flex-col gap-4">
-      <Panel title="Capacitación por tipo y categoría" icon={<Network size={20} />}>
-        <div className="h-44 flex items-center">
-          <div className="w-10 text-center text-2xl font-light">H</div>
-          <div className="flex-1 flex h-12 rounded overflow-hidden">
-            <div className="bg-[hsl(var(--chart-purple))] flex items-center justify-center text-white font-semibold" style={{ width: "28%" }}>10</div>
-            <div className="bg-[hsl(var(--chart-cyan))] flex items-center justify-center text-white font-semibold" style={{ width: "72%" }}>25</div>
-          </div>
-        </div>
-        <div className="flex justify-center gap-6 text-sm mt-2">
-          <span className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-[hsl(var(--chart-magenta))]" />Mixto</span>
-          <span className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-[hsl(var(--chart-cyan))]" />Teórico</span>
-        </div>
-      </Panel>
-
-      <Panel title="Asistencia mensual a reuniones de Kabatim">
-        <div className="h-56">
-          <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={monthly} margin={{ top: 20, right: 20, left: 0, bottom: 10 }}>
-              <defs>
-                <linearGradient id="kabatimFill" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="hsl(var(--chart-magenta))" stopOpacity={0.4} />
-                  <stop offset="100%" stopColor="hsl(var(--chart-magenta))" stopOpacity={0} />
-                </linearGradient>
-              </defs>
-              <XAxis dataKey="m" stroke="hsl(var(--foreground))" fontSize={11} tickLine={false} axisLine={false} />
-              <YAxis stroke="hsl(var(--foreground))" fontSize={11} tickLine={false} axisLine={false} />
-              <Tooltip contentStyle={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))" }} />
-              <Area type="monotone" dataKey="v" stroke="hsl(var(--chart-magenta))" strokeWidth={2.5} fill="url(#kabatimFill)">
-                <LabelList dataKey="v" position="top" fill="hsl(var(--foreground))" fontSize={11} />
-              </Area>
-            </AreaChart>
-          </ResponsiveContainer>
-        </div>
-      </Panel>
-    </div>
-
-    {/* Right column */}
-    <div className="col-span-3">
-      <Panel title="Tasa de asistencia a juntas de Kabatim" iconRight={<BarChart3 size={18} />} className="h-full">
-        <div className="space-y-1.5 text-sm overflow-auto max-h-[500px] pr-2">
-          {ranking.map((r) => (
-            <div key={r.name} className="grid grid-cols-[80px_1fr_36px] items-center gap-2">
-              <span className="text-foreground/90 text-xs text-right truncate">{r.name}</span>
-              <div className="h-4 bg-background/30 rounded-sm overflow-hidden">
-                <div className="h-full bg-[hsl(var(--chart-green))]" style={{ width: `${r.v * 100}%` }} />
-              </div>
-              <span className="text-foreground/90 text-xs">{r.v.toFixed(2).replace(".", ",")}</span>
+        <Panel title="Rango de datos visible" iconRight={<Award size={18} />}>
+          <div className="space-y-2 text-sm">
+            <div className="flex items-center justify-between">
+              <span>Inicio</span>
+              <span>{dateBounds?.minDate ?? "N/D"}</span>
             </div>
-          ))}
-        </div>
-        <div className="mt-3 pt-3 border-t border-[hsl(215_40%_35%)] flex items-center justify-between">
-          <span className="text-sm">Tasa de asistencia promedio:</span>
-          <span className="font-serif text-3xl font-bold text-[hsl(var(--chart-yellow))]">67,3%</span>
-        </div>
-      </Panel>
+            <div className="flex items-center justify-between">
+              <span>Fin</span>
+              <span>{dateBounds?.maxDate ?? "N/D"}</span>
+            </div>
+          </div>
+        </Panel>
+      </div>
+
+      <div className="col-span-6 flex flex-col gap-4">
+        <Panel title="Fuentes actualmente expuestas al frontend" icon={<Network size={20} />}>
+          <div className="grid grid-cols-2 gap-2 text-sm">
+            {exposedSourceTables.map((sourceTable) => (
+              <div key={sourceTable.value} className="rounded-md border border-[hsl(215_40%_32%)] bg-background/30 px-3 py-2">
+                <div className="font-medium">{sourceTable.label}</div>
+                <div className="text-xs text-foreground/70">{sourceTable.value}</div>
+              </div>
+            ))}
+          </div>
+        </Panel>
+
+        <Panel title="Qué falta para dejar esta sección completamente live">
+          <div className="space-y-4 text-sm text-foreground/90">
+            <div className="rounded-md border border-[hsl(215_40%_32%)] bg-background/20 px-4 py-3">
+              <div className="font-medium">`training_session`</div>
+              <div className="text-xs text-foreground/70 mt-1">
+                Requerido para horas-hombre, instructores, categorías y competencias impactadas.
+              </div>
+            </div>
+            <div className="rounded-md border border-[hsl(215_40%_32%)] bg-background/20 px-4 py-3">
+              <div className="font-medium">`kabat_meeting_attendance`</div>
+              <div className="text-xs text-foreground/70 mt-1">
+                Requerido para asistencia mensual y ranking de Kabatim.
+              </div>
+            </div>
+            <p className="text-xs text-foreground/70">
+              Mientras esas vistas no estén expuestas, esta pantalla evita valores simulados y muestra únicamente el estado real de disponibilidad del backend.
+            </p>
+          </div>
+        </Panel>
+      </div>
+
+      <div className="col-span-3">
+        <Panel title="Disponibilidad backend" iconRight={<BarChart3 size={18} />} className="h-full">
+          <div className="space-y-3 text-sm">
+            <div className="rounded-md border border-[hsl(215_40%_32%)] bg-background/25 px-3 py-2">
+              <div className="flex items-center justify-between">
+                <span>Filtros globales</span>
+                <span className="text-[hsl(var(--chart-green))] font-semibold">Listo</span>
+              </div>
+            </div>
+            <div className="rounded-md border border-[hsl(215_40%_32%)] bg-background/25 px-3 py-2">
+              <div className="flex items-center justify-between">
+                <span>RPC de filtros</span>
+                <span className="text-[hsl(var(--chart-green))] font-semibold">Listo</span>
+              </div>
+            </div>
+            <div className="rounded-md border border-[hsl(215_40%_32%)] bg-background/25 px-3 py-2">
+              <div className="flex items-center justify-between">
+                <span>View de capacitación</span>
+                <span className="text-[hsl(var(--chart-red))] font-semibold">Pendiente</span>
+              </div>
+            </div>
+            <div className="rounded-md border border-[hsl(215_40%_32%)] bg-background/25 px-3 py-2">
+              <div className="flex items-center justify-between">
+                <span>View de Kabatim</span>
+                <span className="text-[hsl(var(--chart-red))] font-semibold">Pendiente</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-4 rounded-lg border border-[hsl(215_40%_32%)] bg-background/20 px-4 py-4 text-sm text-foreground/80">
+            <DatabaseZap className="mb-3" />
+            Sin una vista pública adicional para capacitación, cualquier KPI numérico aquí volvería a ser mock. Esta sección queda aislada hasta que el backend exponga esos datos.
+          </div>
+        </Panel>
+      </div>
     </div>
-  </div>
-);
+  );
+};
