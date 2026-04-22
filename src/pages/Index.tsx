@@ -15,8 +15,8 @@ const SECTIONS = [
   { key: "accesos", label: "Accesos", filters: [{ label: "Fecha" }], Component: AccesosPage },
   { key: "coberturas", label: "Coberturas", filters: undefined, Component: CoberturasPage },
   { key: "eventos", label: "Análisis de Eventos", filters: undefined, Component: EventosPage },
-  { key: "situaciones", label: "Gestión de situaciones", filters: undefined, Component: SituacionesPage },
-  { key: "eficiencia", label: "Eficiencia Tecnológica", filters: [{ label: "Fecha", value: "2026 (Año) + enero (Mes)" }, { label: "Zona" }, { label: "Comunidad" }, { label: "Tipo" }, { label: "Institución" }], Component: EficienciaPage },
+  { key: "situaciones", label: "Situaciones", filters: undefined, Component: SituacionesPage },
+  { key: "eficiencia", label: "vigilancia", filters: [{ label: "Fecha", value: "2026 (Año) + enero (Mes)" }, { label: "Zona" }, { label: "Comunidad" }, { label: "Tipo" }, { label: "Institución" }], Component: EficienciaPage },
 ] as const;
 
 const Index = () => {
